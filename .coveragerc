@@ -1,0 +1,5 @@
+[run]
+source = asphalt.memcached
+
+[report]
+show_missing = true

@@ -1,21 +1,18 @@
 Asphalt-memcached documentation
 ===============================
 
-Asphalt-memcached provides access to Memcached_ databases for Asphalt applications by wrapping the
-aiomcache_ library. It provides no extra functionality beyond what aiomcache_ offers.
+.. include:: ../README.rst
+   :start-line: 7
+   :end-before: Project links
 
-.. _Memcached: https://memcached.org/
-.. _aiomcache: https://github.com/aio-libs/aiomcache
+Table of contents
+-----------------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    configuration
    usage
    versionhistory
-
-
-Indices and tables
-==================
 
 * :ref:`API reference <modindex>`

@@ -23,3 +23,14 @@ notifications:
     on_failure: change
     use_notice: true
     skip_join: true
+
+deploy:
+  provider: pypi
+  user: agronholm
+  password:
+    secure: B1uVukC9rF4/94R1aLfr2nyRCPD3eVfCbkZ01zaWevmcS1aO8DB3X45N/dcQpFVA1zYkph3T3zcMui5ML0yYR9Bm+5fpmGZMRSGoeSM57w3/V4f91+MnZcXcugtGOD8angOgfJFAWsOn/jPelKI3y4zO6X3gUVOEYzQNpWCdKszHuTRSwVFDqddcWxt6yHU3okoDndywigeNaJx7ve+Tx0TFq/4fp315Xd9tOX+/dhXV0RZRcyKrEG5du1IputRizFFQfwS+GD8Q74WcVYtaDX6sqmkc2XKmyXTugbBH5mTornWJMQgwJux/AIvcHYtb+0UYfpAh9GnOjvhBBsD49ZCUNHFlVI8+4GaKYsjymQ9dezVv6U+KOWBMEjg5eYl3nQpoV7K4cMepnRI1tiUnIzCfn2ScquSnN0RkxmG84iRgphrE4MwHh4P7c1+19rkCLExFTnWvQlVrPnXcIrk+XnSemCrBD84ywXEpdpVLeEcYGFEm4po0pCYUjlwg2JRaC6DxCuE1syfchis/FTE9haqd1ZCsFpTLtRKDeSyGfMqUEZ55u39KUX4iacFPv16f0+fn0DN5WZTR45L9/JqO1hnyXj654R8nXyUqMz8OzB9v8pphfjloW9Wcx2xGKD+B57fgRu3cGT0pw5uJ/UPQKVJf0AlTnXWWBoO8g9r4kJg=
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+    python: "3.5"
+    repo: asphalt-framework/asphalt-memcached

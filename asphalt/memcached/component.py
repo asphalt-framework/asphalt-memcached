@@ -1,9 +1,9 @@
 import logging
-from functools import partial
 from typing import Dict, Any
 
 from aiomcache import Client
-from asphalt.core import Component, Context, merge_config
+from async_generator import yield_
+from asphalt.core import Component, Context, merge_config, context_teardown
 from typeguard import check_argument_types
 
 logger = logging.getLogger(__name__)
@@ -35,18 +35,16 @@ class MemcachedComponent(Component):
         self.clients = []
         for resource_name, config in clients.items():
             config = merge_config(default_client_args, config or {})
-            config.setdefault('context_attr', resource_name)
-            context_attr, client = self.configure_client(**config)
+            context_attr = config.pop('context_attr', resource_name)
+            config.setdefault('host', 'localhost')
+            client = self.configure_client(**config)
             self.clients.append((resource_name, context_attr, client))
 
     @classmethod
-    def configure_client(cls, context_attr: str, host: str = 'localhost', port: int = 11211,
-                         **client_args):
+    def configure_client(cls, host: str = 'localhost', port: int = 11211, **client_args):
         """
         Configure a Memcached client.
 
-        :param context_attr: context attribute of the serializer (if omitted, the resource name
-            will be used instead)
         :param host: host name or ip address to connect to
         :param port: port number to connect to
         :param client_args: extra keyword arguments passed to :class:`aiomcache.Client`
@@ -54,16 +52,16 @@ class MemcachedComponent(Component):
         """
         assert check_argument_types()
         client = Client(host, port, **client_args)
-        return context_attr, client
+        return client
 
-    @staticmethod
-    async def shutdown_client(event, client, resource_name):
-        client.close()
-        logger.info('Memcached client (%s) shut down', resource_name)
-
+    @context_teardown
     async def start(self, ctx: Context):
         for resource_name, context_attr, client in self.clients:
-            ctx.finished.connect(
-                partial(self.shutdown_client, client=client, resource_name=resource_name))
-            ctx.publish_resource(client, resource_name, context_attr)
+            ctx.add_resource(client, resource_name, context_attr)
             logger.info('Configured Memcached client (%s / ctx.%s)', resource_name, context_attr)
+
+        await yield_()
+
+        for resource_name, context_attr, client in self.clients:
+            client.close()
+            logger.info('Memcached client (%s) shut down', resource_name)

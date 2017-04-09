@@ -31,7 +31,7 @@ setup(
         'setuptools_scm >= 1.7.0'
     ],
     install_requires=[
-        'asphalt ~= 2.0',
+        'asphalt ~= 3.0',
         'aiomcache >= 0.3.0'
     ],
     extras_require={
